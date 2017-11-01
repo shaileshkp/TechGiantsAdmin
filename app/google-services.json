@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "831735538472",
+    "firebase_url": "https://examination-f5f4c.firebaseio.com",
+    "project_id": "examination-f5f4c",
+    "storage_bucket": "examination-f5f4c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:831735538472:android:dbbeb8893f7a6432",
+        "android_client_info": {
+          "package_name": "com.example.examinationsystem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "831735538472-0k0kcjtlt4bietcpulr8t68n14q4iqln.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.examinationsystem",
+            "certificate_hash": "c7e1991b4510d9d3a98b913f98d6d89e6e4cfaff"
+          }
+        },
+        {
+          "client_id": "831735538472-ooaev4aoecv6074nnluu3slspnsqfbc0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdSpreydowu2S-kvrZl-aLa6EFypRmxPc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "831735538472-ooaev4aoecv6074nnluu3slspnsqfbc0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:831735538472:android:7a8939a2169021bb",
+        "android_client_info": {
+          "package_name": "com.techgiants.admin.techgiantsadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "831735538472-tnhgq5arv186vkm16jhnvvrpjbkv99af.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.techgiants.admin.techgiantsadmin",
+            "certificate_hash": "c7e1991b4510d9d3a98b913f98d6d89e6e4cfaff"
+          }
+        },
+        {
+          "client_id": "831735538472-ooaev4aoecv6074nnluu3slspnsqfbc0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdSpreydowu2S-kvrZl-aLa6EFypRmxPc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "831735538472-ooaev4aoecv6074nnluu3slspnsqfbc0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
