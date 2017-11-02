@@ -1,5 +1,6 @@
 package com.techgiants.admin.techgiantsadmin.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -105,6 +106,15 @@ public class MainActivity extends AppCompatActivity
                     postsFragment,
                     postsFragment.getTag()
             ).commit();
+        }
+        if(id == R.id.nav_exams) {
+            Intent intent = new Intent(MainActivity.this, SubjectsActivity.class);
+            startActivity(intent);
+        }
+        if (id == R.id.nav_logout) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

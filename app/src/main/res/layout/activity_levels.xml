@@ -5,16 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg"
-    tools:context="com.techgiants.admin.techgiantsadmin.ui.SubjectsActivity">
+    tools:context="com.techgiants.admin.techgiantsadmin.ui.LevelsActivity">
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/subjects_list_subject"
+        android:id="@+id/list_levels"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
     </android.support.v7.widget.RecyclerView>
-
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/subjects_add_subject"
+        android:id="@+id/levels_add_level"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/ic_input_add"
