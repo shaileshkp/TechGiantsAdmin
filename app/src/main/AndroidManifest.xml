@@ -24,8 +24,15 @@
             android:name=".ui.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.SubjectsActivity" android:parentActivityName=".ui.MainActivity" />
-        <activity android:name=".ui.LevelsActivity" android:parentActivityName=".ui.SubjectsActivity"></activity>
+        <activity
+            android:name=".ui.SubjectsActivity"
+            android:parentActivityName=".ui.MainActivity" />
+        <activity
+            android:name=".ui.LevelsActivity"
+            android:parentActivityName=".ui.SubjectsActivity" />
+        <activity android:name=".ui.QuestionsActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".ui.LevelsActivity"/>
     </application>
 
 </manifest>

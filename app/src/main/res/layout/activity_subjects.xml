@@ -21,5 +21,6 @@
         android:layout_gravity="bottom|end"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/fab_margin"/>
+        android:layout_margin="@dimen/fab_margin"
+        />
 </RelativeLayout>

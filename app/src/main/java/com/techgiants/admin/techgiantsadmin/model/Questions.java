@@ -5,18 +5,27 @@ package com.techgiants.admin.techgiantsadmin.model;
  */
 
 public class Questions {
-    private  String answer1,answer2,answer3,answer4,correctAnswer,levelId;
+    private  String question,answer1,answer2,answer3,answer4,correctAnswer,levelId;
 
     public Questions() {
     }
 
-    public Questions(String answer1, String answer2, String answer3, String answer4, String correctAnswer, String levelId) {
+    public Questions(String question, String answer1, String answer2, String answer3, String answer4, String correctAnswer, String levelId) {
+        this.question = question;
         this.answer1 = answer1;
         this.answer2 = answer2;
         this.answer3 = answer3;
         this.answer4 = answer4;
         this.correctAnswer = correctAnswer;
         this.levelId = levelId;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
     }
 
     public String getAnswer1() {

@@ -43,7 +43,7 @@ public class SubjectsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subjects);
-
+        setTitle("Subjects");
         addSubject = (FloatingActionButton) findViewById(R.id.subjects_add_subject);
         recycler_subjects = (RecyclerView) findViewById(R.id.subjects_list_subject);
         recycler_subjects.setHasFixedSize(true);

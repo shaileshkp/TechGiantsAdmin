@@ -65,7 +65,7 @@ public class LevelsActivity extends AppCompatActivity {
     private void showInputLevelDialog() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(LevelsActivity.this);
         LayoutInflater inflater = this.getLayoutInflater();
-        final View level_input_layout = inflater.inflate(R.layout.layout_level_add, null);
+        final View level_input_layout = inflater.inflate(R.layout.layout_add_level, null);
         txtLevName = (MaterialEditText) level_input_layout.findViewById(R.id.txtLevName);
         txtLevDur = (MaterialEditText) level_input_layout.findViewById(R.id.txtLevDur);
         txtLevDesc = (MaterialEditText) level_input_layout.findViewById(R.id.txtLevDesc);
@@ -120,7 +120,10 @@ public class LevelsActivity extends AppCompatActivity {
                 viewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
-
+                        Intent intent = new Intent(LevelsActivity.this, QuestionsActivity.class);
+                        Common.levelName = adapter.getItem(position).getLevel();
+                        Common.levelId = adapter.getRef(position).getKey();
+                        startActivity(intent);
                     }
                 });
             }
