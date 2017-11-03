@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/white"
     android:orientation="horizontal"
-    android:weightSum="4"
+    android:weightSum="5"
     android:layout_margin="4dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <LinearLayout
-        android:layout_weight="3"
+        android:layout_weight="4"
         android:layout_width="0dp"
         android:orientation="vertical"
         android:layout_height="wrap_content">
@@ -57,5 +57,33 @@
             android:textColor="@android:color/black"
             />
     </LinearLayout>
-
+    <RelativeLayout
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true">
+            <ImageButton
+                android:id="@+id/editQuestion"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/edit"
+                android:scaleType="centerInside"
+                android:background="@android:color/white"
+                android:layout_margin="4dp"
+                />
+            <ImageButton
+                android:id="@+id/deleteQuestion"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/delete"
+                android:scaleType="centerInside"
+                android:background="@android:color/white"
+                android:layout_margin="4dp"
+                />
+        </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

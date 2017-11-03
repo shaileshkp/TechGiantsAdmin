@@ -9,7 +9,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -41,12 +44,12 @@ public class QuestionsActivity extends AppCompatActivity {
     RecyclerView recycler_questions;
     RecyclerView.LayoutManager layoutManager;
 
-    FloatingActionButton addQuestion;
-
     MaterialEditText txtQuestion, txtOpt1, txtOpt2, txtOpt3, txtOpt4;
     RadioButton opt1, opt2, opt3, opt4;
     RadioGroup radioGroup;
     FButton btnAdd, btnCancle;
+    Questions questionsObj;
+    String questionId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +66,6 @@ public class QuestionsActivity extends AppCompatActivity {
         txtToolbarLevel.setText(Common.levelName);
         txtToolbarSubject.setText(Common.subjName);
 
-        addQuestion = (FloatingActionButton) findViewById(R.id.questions_add_questions);
         recycler_questions = (RecyclerView) findViewById(R.id.questions_list_questions);
         recycler_questions.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(QuestionsActivity.this);
@@ -72,14 +74,8 @@ public class QuestionsActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         questions = database.getReference("Questions");
         loadQuestions();
-
-        addQuestion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showInputQuestionDialog();
-            }
-        });
     }
+
     private void loadQuestions() {
 
         adapter = new FirebaseRecyclerAdapter<Questions, QuestionsViewHolder>(
@@ -89,7 +85,7 @@ public class QuestionsActivity extends AppCompatActivity {
                 questions.orderByChild("levelId").equalTo(Common.levelId)
         ) {
             @Override
-            protected void populateViewHolder(QuestionsViewHolder viewHolder, final Questions model, int position) {
+            protected void populateViewHolder(QuestionsViewHolder viewHolder, final Questions model, final int position) {
                 viewHolder.txtQuestion.setText(model.getQuestion());
                 viewHolder.txtOpt1.setText(model.getAnswer1());
                 viewHolder.txtOpt2.setText(model.getAnswer2());
@@ -106,6 +102,21 @@ public class QuestionsActivity extends AppCompatActivity {
                         Toast.makeText(QuestionsActivity.this, "Click", Toast.LENGTH_SHORT).show();
                     }
                 });
+                viewHolder.btnEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        questionId = adapter.getRef(position).getKey();
+                        questionsObj = adapter.getItem(position);
+                        showInputQuestionDialog("UPDATE");
+
+                    }
+                });
+                viewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(QuestionsActivity.this, ""+adapter.getItem(position).getCorrectAnswer(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         };
 
@@ -113,7 +124,7 @@ public class QuestionsActivity extends AppCompatActivity {
         recycler_questions.setAdapter(adapter);
     }
 
-    private void showInputQuestionDialog() {
+    private void showInputQuestionDialog(final String inputType) {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(QuestionsActivity.this);
         LayoutInflater inflater = this.getLayoutInflater();
@@ -129,8 +140,12 @@ public class QuestionsActivity extends AppCompatActivity {
         opt4 = (RadioButton) ques_input_layout.findViewById(R.id.addQuesOpt4);
 
         btnAdd = (FButton) ques_input_layout.findViewById(R.id.btnAdd);
+        btnAdd.setText((inputType.equals("ADD")?"ADD":"UPDATE"));
+
         btnCancle = (FButton) ques_input_layout.findViewById(R.id.btnCancle);
 
+        if (inputType.equals("UPDATE"))
+            fillUpdateCall();
         builder.setView(ques_input_layout);
         final AlertDialog alertDialog = builder.create();
 
@@ -175,16 +190,21 @@ public class QuestionsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 DatabaseReference databaseReference = database.getReference("Questions");
-                String id = databaseReference.push().getKey();
                 String question = txtQuestion.getText().toString().trim();
                 String opt1 = txtOpt1.getText().toString().trim();
                 String opt2 = txtOpt2.getText().toString().trim();
                 String opt3 = txtOpt3.getText().toString().trim();
                 String opt4 = txtOpt4.getText().toString().trim();
                 String correctAns = getCorrectAnswer();
+
                 if(!question.isEmpty() && !opt1.isEmpty() && !opt2.isEmpty()&& !opt3.isEmpty() && !opt4.isEmpty() && !correctAns.isEmpty() ){
                     Questions questions = new Questions(question, opt1, opt2, opt3, opt4, correctAns, Common.levelId);
-                    databaseReference.child(id).setValue(questions);
+                    if(inputType.equals("ADD")){
+                        String id = databaseReference.push().getKey();
+                        databaseReference.child(id).setValue(questions);
+                    } else {
+                        databaseReference.child(questionId).setValue(questions);
+                    }
                     alertDialog.dismiss();
                     Toast.makeText(QuestionsActivity.this, "Question Added", Toast.LENGTH_SHORT).show();
                 } else {
@@ -201,6 +221,22 @@ public class QuestionsActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    private void fillUpdateCall() {
+        txtQuestion.setText(questionsObj.getQuestion());
+        txtOpt1.setText(questionsObj.getAnswer1());
+        txtOpt2.setText(questionsObj.getAnswer2());
+        txtOpt3.setText(questionsObj.getAnswer3());
+        txtOpt4.setText(questionsObj.getAnswer4());
+        if(questionsObj.getCorrectAnswer().equals(questionsObj.getAnswer1()))
+            opt1.setChecked(true);
+        else if(questionsObj.getCorrectAnswer().equals(questionsObj.getAnswer2()))
+            opt2.setChecked(true);
+        else if(questionsObj.getCorrectAnswer().equals(questionsObj.getAnswer3()))
+            opt3.setChecked(true);
+        else
+            opt4.setChecked(true);
+    }
+
     private String getCorrectAnswer() {
         if(opt1.isChecked()) {
             return  txtOpt1.getText().toString().trim();
@@ -213,5 +249,28 @@ public class QuestionsActivity extends AppCompatActivity {
         } else {
             return "";
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_add) {
+            showInputQuestionDialog("ADD");
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

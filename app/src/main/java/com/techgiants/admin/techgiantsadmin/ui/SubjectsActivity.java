@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -35,16 +37,14 @@ public class SubjectsActivity extends AppCompatActivity {
 
     RecyclerView recycler_subjects;
     RecyclerView.LayoutManager layoutManager;
-
-    FloatingActionButton addSubject;
-
+    Subjects subjectsObj;
+    String subjectId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subjects);
         setTitle("Subjects");
-        addSubject = (FloatingActionButton) findViewById(R.id.subjects_add_subject);
         recycler_subjects = (RecyclerView) findViewById(R.id.subjects_list_subject);
         recycler_subjects.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(SubjectsActivity.this);
@@ -53,13 +53,6 @@ public class SubjectsActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         subjects = database.getReference("Subjects");
         loadSubjects();
-
-        addSubject.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showInputSubjectDialog();
-            }
-        });
     }
     private void loadSubjects() {
 
@@ -70,7 +63,7 @@ public class SubjectsActivity extends AppCompatActivity {
                 subjects
         ) {
             @Override
-            protected void populateViewHolder(SubjectViewHolder viewHolder, final Subjects model, int position) {
+            protected void populateViewHolder(SubjectViewHolder viewHolder, final Subjects model, final int position) {
                 viewHolder.txtSubjectName.setText(model.getSubjectName());
                 viewHolder.txtDesc.setText(model.getDesc());
                 viewHolder.setItemClickListener(new ItemClickListener() {
@@ -82,13 +75,24 @@ public class SubjectsActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
+
+                viewHolder.btnEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        subjectId= adapter.getRef(position).getKey();
+                        subjectsObj = adapter.getItem(position);
+                        showInputSubjectDialog("UPDATE");
+                    }
+                });
+
             }
         };
 
         adapter.notifyDataSetChanged();
         recycler_subjects.setAdapter(adapter);
     }
-    private void showInputSubjectDialog() {
+
+    private void showInputSubjectDialog(final String inputType) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(SubjectsActivity.this);
         LayoutInflater inflater = this.getLayoutInflater();
         final View subj_input_layout = inflater.inflate(R.layout.layout_subject_add, null);
@@ -96,8 +100,12 @@ public class SubjectsActivity extends AppCompatActivity {
         txtSubjDesc = (MaterialEditText) subj_input_layout.findViewById(R.id.txtSubjDesc);
 
         btnAdd = (FButton) subj_input_layout.findViewById(R.id.btnAdd);
+        btnAdd.setText((inputType.equals("ADD")?"ADD":"UPDATE"));
+
         btnCancle = (FButton) subj_input_layout.findViewById(R.id.btnCancle);
 
+        if (inputType.equals("UPDATE"))
+            fillUpdateCall();
         builder.setView(subj_input_layout);
         final AlertDialog alertDialog = builder.create();
 
@@ -105,16 +113,20 @@ public class SubjectsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 DatabaseReference databaseReference = database.getReference("Subjects");
-                String id = databaseReference.push().getKey();
                 String subjName = txtSubjName.getText().toString().trim();
                 String subjDesc = txtSubjDesc.getText().toString().trim();
                 if(!subjDesc.isEmpty() && !subjName.isEmpty()){
                     Subjects subjects = new Subjects(subjName, subjDesc);
-                    databaseReference.child(id).setValue(subjects);
+                    if(inputType.equals("ADD")){
+                        String id = databaseReference.push().getKey();
+                        databaseReference.child(id).setValue(subjects);
+                    }
+                    else
+                        databaseReference.child(subjectId).setValue(subjects);
                     alertDialog.dismiss();
-                    Toast.makeText(SubjectsActivity.this, subjName+" Added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SubjectsActivity.this, subjName+" "+inputType, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(SubjectsActivity.this, "Plese input valid values.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SubjectsActivity.this, "Please input valid values.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -125,5 +137,33 @@ public class SubjectsActivity extends AppCompatActivity {
             }
         });
         alertDialog.show();
+    }
+
+    private void fillUpdateCall() {
+        txtSubjName.setText(subjectsObj.getSubjectName());
+        txtSubjDesc.setText(subjectsObj.getDesc());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_add) {
+            showInputSubjectDialog("ADD");
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
